@@ -74,4 +74,6 @@ The browser page is a display of raw API responses and nothing else. It has no l
 - Update `docs/evidence.md` with actual test evidence: the real `npm test` output and the checklist, never expected results. The "browser UI demonstrates the behavior" item needs a real run of the page, not an inference from the tests.
 - Update `docs/lessons-learned.md` based on what the implementation demonstrated.
 
+`EVIDENCE.md` at the root is the one-page summary (hypothesis, test, observation, result) drawn from `docs/evidence.md`. A change to the recorded results must be made in both.
+
 Treat passing tests and preserved contracts as evidence, not prose claims.
