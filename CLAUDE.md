@@ -46,7 +46,7 @@ There are no dependencies, so no `npm install` is needed. There is no build step
 
 ## Current state
 
-The intent in `intent/feature.md` is implemented and all 12 tests pass. `docs/evidence.md` records the runs. Its one open item is watching the behaviour in a real browser, which a human has not yet done.
+The intent in `intent/feature.md` is implemented and all 12 tests pass. `docs/evidence.md` records the runs. The browser check there was an automated run in headless Chrome; no person has watched the page.
 
 The starter (the first commit on `main`) ran 10 passing and 1 failing: `permanent failure must not retry` in `tests/retryAcceptance.test.js`, the acceptance test for KI-001. To repeat the experiment, start from that commit and expect that red test.
 
