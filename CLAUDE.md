@@ -44,9 +44,11 @@ There are no dependencies, so no `npm install` is needed. There is no build step
 - `node --test --test-name-pattern="permanent failure" tests/retryAcceptance.test.js` runs one test by name.
 - `npm start` serves the API and the demo page at http://localhost:3000 (`PORT` overrides it). `server.listen` is called without a host, so it listens on every network interface, not only localhost.
 
-## Starting state
+## Current state
 
-`README.md` says the baseline tests pass. They do not: the starter runs 10 passing and 1 failing. The failure is `permanent failure must not retry` in `tests/retryAcceptance.test.js`, which is the acceptance test for the requested change (KI-001). A red run before the change is expected; a red run after it is not.
+The intent in `intent/feature.md` is implemented and all 12 tests pass. `docs/evidence.md` records the runs. Its one open item is watching the behaviour in a real browser, which a human has not yet done.
+
+The starter (the first commit on `main`) ran 10 passing and 1 failing: `permanent failure must not retry` in `tests/retryAcceptance.test.js`, the acceptance test for KI-001. To repeat the experiment, start from that commit and expect that red test.
 
 ## Architecture
 
@@ -65,7 +67,7 @@ The browser page is a display of raw API responses and nothing else. It has no l
 - `service-contracts.md` is the public contract. It shows the rejection reason only as `"reason-code"`; the actual codes are pinned by the tests: `retry-allowed`, `already-succeeded`, `retry-limit-reached`, and `permanent-failure`.
 - `database-rules.md` requires that a rejected retry leaves `retryCount` unchanged and an accepted one adds exactly 1. The tests assert `retryCount` on every retry result.
 - `tests/contract.test.js` checks field presence over real HTTP; `tests/paymentService.test.js` covers existing behaviour; `tests/retryAcceptance.test.js` is the four retry criteria from `intent/feature.md`. Add or change tests only where the intent's behaviour requires it.
-- `known-issues.md` KI-001 and the comment in `evaluateRetry` describe the same gap. Resolving one means updating the other.
+- The rules in `evaluateRetry` run in a fixed order: already succeeded, then permanent failure, then retry limit. No document or test says which reason a payment that is both permanent and at its limit should report, so changing the order changes untested behaviour.
 
 ## After the tests pass
 

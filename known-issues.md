@@ -1,15 +1,13 @@
 # Known Issues
 
-## KI-001 — Permanent failures are currently retryable
+## KI-001 — Permanent failures were retryable (resolved)
 
-The starter implementation checks:
+Resolved on 2026-10-07 by the feature intent. A retry of a permanently failed payment is now rejected with the reason `permanent-failure`. See `docs/evidence.md`.
+
+The starter implementation checked only:
 
 - whether the payment already succeeded
 - whether the retry limit has been reached
-
-It does **not** currently reject a retry when the previous failure is permanent.
-
-This is the primary change requested by the feature intent.
 
 ## KI-002 — Browser UI is intentionally minimal
 

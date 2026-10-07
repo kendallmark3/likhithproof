@@ -33,12 +33,14 @@ function evaluateRetry(payment) {
     return { allowed: false, reason: "already-succeeded" };
   }
 
+  if (payment.failureType === "permanent") {
+    return { allowed: false, reason: "permanent-failure" };
+  }
+
   if (payment.retryCount >= payment.retryLimit) {
     return { allowed: false, reason: "retry-limit-reached" };
   }
 
-  // Known issue KI-001:
-  // permanent failures are not yet distinguished from transient failures.
   return { allowed: true, reason: "retry-allowed" };
 }
 
