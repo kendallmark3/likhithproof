@@ -1,6 +1,6 @@
 # Evidence
 
-Status: **Intent implemented on 2026-10-07. Automated evidence recorded; the browser page has not yet been watched by a human.**
+Status: **Intent implemented on 2026-10-07. Automated evidence recorded, including a run of the page in a real browser.**
 
 Everything below is copied from actual runs on Node v20.20.2.
 
@@ -13,9 +13,9 @@ Everything below is copied from actual runs on Node v20.20.2.
 - [x] rejected retries do not increment retry count
 - [x] public API contract tests pass
 - [x] all automated tests pass
-- [ ] browser UI demonstrates the behavior
+- [x] browser UI demonstrates the behavior
 
-The last item is open on purpose. See Human Demonstration.
+The last item was checked by an automated run in headless Chrome, not by a person watching. See Human Demonstration.
 
 ## Before the Change
 
@@ -101,22 +101,26 @@ One decision was not settled by any file: which reason a permanent failure that 
 
 ## Human Demonstration
 
-Not yet done in a browser.
-
-What was done instead: the real request handler was started on `127.0.0.1` and sent the same requests the page sends. This shows what the page would display, since the page prints the raw response, but nobody has looked at the page itself.
+The page was run in headless Chrome 154 against the server on `127.0.0.1`. A script set the Outcome dropdown, clicked the real **Create payment** and **Retry payment** buttons, and read the text of the **Observed result** panel after each click. This is what the page displayed:
 
 ```text
-GET / -> 200
-GET /app.js -> 200
-transient: create -> 201 status=failed failureType=transient
-transient: retry 1 -> 200 allowed=true reason=retry-allowed retryCount=1
-transient: retry 2 -> 200 allowed=true reason=retry-allowed retryCount=2
-transient: retry 3 -> 200 allowed=true reason=retry-allowed retryCount=3
-transient: retry 4 -> 409 allowed=false reason=retry-limit-reached retryCount=3
-permanent: create -> 201 status=failed failureType=permanent
-permanent: retry 1 -> 409 allowed=false reason=permanent-failure retryCount=0
-success: create -> 201 status=succeeded failureType=null
-success: retry 1 -> 409 allowed=false reason=already-succeeded retryCount=0
+transient create: HTTP 201 status=failed failureType=transient
+transient retry 1: HTTP 200 allowed=true reason=retry-allowed retryCount=1
+transient retry 2: HTTP 200 allowed=true reason=retry-allowed retryCount=2
+transient retry 3: HTTP 200 allowed=true reason=retry-allowed retryCount=3
+transient retry 4: HTTP 409 allowed=false reason=retry-limit-reached retryCount=3
+permanent create: HTTP 201 status=failed failureType=permanent
+permanent retry 1: HTTP 409 allowed=false reason=permanent-failure retryCount=0
+success create: HTTP 201 status=succeeded failureType=null
+success retry 1: HTTP 409 allowed=false reason=already-succeeded retryCount=0
 ```
 
-To close the open checklist item: run `npm start`, open http://localhost:3000, create a payment with each of the three outcomes, press Retry, and compare the result panel with the lines above.
+Screenshots of the page after the last click in each case:
+
+- `docs/screenshots/transient.png`
+- `docs/screenshots/permanent.png`
+- `docs/screenshots/success.png`
+
+![Permanent failure rejected with 409 and reason permanent-failure](screenshots/permanent.png)
+
+The clicks were made by a script, so this shows the page works, not that a person has reviewed it. To watch it yourself: run `npm start`, open http://localhost:3000, create a payment with each of the three outcomes, press Retry, and compare the result panel with the lines above.
