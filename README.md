@@ -77,13 +77,11 @@ npm test
 
 ## Current State
 
-The starter intentionally contains an incomplete retry rule.
+The brownfield change has been implemented: retry validation now rejects permanent failures. All 12 tests pass, and the results are recorded in `docs/evidence.md`.
 
-The public API works, the small browser UI works, and baseline tests pass.
+The starter intentionally contained an incomplete retry rule that did **not** distinguish transient failures from permanent failures. It ran 10 passing tests and 1 failing test, the acceptance test for that rule.
 
-The retry validation currently does **not** distinguish transient failures from permanent failures.
-
-That is the brownfield change.
+The starter is the first commit on `main`, for anyone who wants to repeat the experiment from the beginning.
 
 ## Suggested Claude Code Instruction
 
